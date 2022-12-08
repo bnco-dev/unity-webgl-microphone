@@ -35,8 +35,8 @@ in the browser, this only led to audio issues when I tested it.
 
 |              | Read-In            | Loopback           |
 |--------------|--------------------|--------------------|
-| Firefox 107  | :white_check_mark: | :white_check_mark: |
+| Firefox 107  | :white_check_mark: | :x:                |
 | Edge 108     | :white_check_mark: | :white_check_mark: |
-| Chromium 108 | :white_check_mark: | :x:                |
+| Chromium 108 | :white_check_mark: | :white_check_mark: |
 
 Pull requests welcome. Enjoy :)
