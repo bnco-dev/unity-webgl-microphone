@@ -24,6 +24,9 @@ namespace UnityEngine
     // decide. Though it's possible in theory to specify your desired frequency
     // in the browser, this only led to audio issues when I tested it.
     //
+    // 4) Unity's audio API has limitations on WebGL. See
+    // (https://docs.unity3d.com/Manual/webgl-audio.html)
+    //
     // Enjoy :)
     public class Microphone
     {
