@@ -1,0 +1,19 @@
+{
+  "name": "com.bnco.unity-webgl-microphone",
+  "version": "1.0.0",
+  "displayName": "Unity WebGL Microphone",
+  "description": "Microphone plugin for Unity when using WebGL/WebXR build target",
+  "unity": "2020.3",
+  "keywords": [],
+  "author": {
+    "name": "bnco",
+    "url": "https://github.com/bnco-dev"
+  },
+  "samples": [
+    {
+      "displayName": "Loopback",
+      "description": "Buildable test scene, reads data from mic and plays back",
+      "path": "Samples~/Loopback"
+    }
+  ]
+}
