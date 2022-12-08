@@ -33,8 +33,10 @@ in the browser, this only led to audio issues when I tested it.
 
 ## Compatibility
 
-Edge 108, read-in :white_check_mark:, loopback :white_check_mark:
-Chromium 108, read-in :white_check_mark:, loopback :white_check_mark:
-Firefox 107, read-in :white_check_mark:, loopback :x:
+|              | Read-In            | Loopback           |
+|--------------|--------------------|--------------------|
+| Firefox 107  | :white_check_mark: | :white_check_mark: |
+| Edge 108     | :white_check_mark: | :white_check_mark: |
+| Chromium 108 | :white_check_mark: | :x:                |
 
 Pull requests welcome. Enjoy :)
