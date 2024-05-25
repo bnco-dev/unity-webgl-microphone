@@ -33,10 +33,20 @@ in the browser, this only led to audio issues when I tested it.
 
 ## Compatibility
 
-|              | Read-In            | Loopback           |
-|--------------|--------------------|--------------------|
-| Firefox 107  | :white_check_mark: | :x:                |
-| Edge 108     | :white_check_mark: | :white_check_mark: |
-| Chromium 108 | :white_check_mark: | :white_check_mark: |
+| Unity       | Browser      | Read-In            | Loopback           |
+|-------------|--------------|--------------------|--------------------|
+|             |              |                    |                    |
+|             | Firefox 107  | :white_check_mark: | :x:                |
+| 2021.3.29f1 | Edge 108     | :white_check_mark: | :white_check_mark: |
+|             | Chromium 108 | :white_check_mark: | :white_check_mark: |
+|             |              |                    |                    |
+|             | Firefox 107  | :white_check_mark: | :x:                |
+| 2022.3.28f1 | Edge 108     | :white_check_mark: | :white_check_mark: |
+|             | Chromium 108 | :white_check_mark: | :white_check_mark: |
+|             |              |                    |                    |
+|             | Firefox 107  | :white_check_mark: | :x:                |
+| 6000.0.2f1  | Edge 108     | :white_check_mark: | :white_check_mark: |
+|             | Chromium 108 | :white_check_mark: | :white_check_mark: |
+
 
 Pull requests welcome. Enjoy :)
