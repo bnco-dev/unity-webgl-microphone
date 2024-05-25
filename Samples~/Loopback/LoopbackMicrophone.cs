@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace UnityWebGLMicrophone.Samples
 {
@@ -9,18 +10,26 @@ namespace UnityWebGLMicrophone.Samples
 
         void Update()
         {
-            if (clip == null)
+            if (!clip)
             {
+                // This will return null if the audio context has not started
+                // up yet. This might happen if permissions have not been
+                // granted in the browser, or if the user hasn't interacted
+                // with the web page yet. So just keep trying until we get a
+                // clip.
                 clip = Microphone.Start("",true,10,16000);
+                
+                if (!clip)
+                {
+                    UpdateUI("Click to start loopback");
+                    return;
+                }
             }
 
-            if (clip == null)
+            if (!audioSource)
             {
-                return;
-            }
-
-            if (audioSource == null)
-            {
+                // Create audio source and set audio source clip to microphone
+                // clip. This creates the loopback.
                 audioSource = gameObject.AddComponent<AudioSource>();
                 audioSource.clip = clip;
                 audioSource.loop = true;
@@ -31,11 +40,33 @@ namespace UnityWebGLMicrophone.Samples
             clip.GetData(data,0);
             var pos = Microphone.GetPosition("");
             var vol = 0.0f;
-            for(int i = pos - 512; (i < data.Length) && (i < pos) && (i >= 0); i++)
+            for(int i = pos - 2048; (i < data.Length) && (i < pos) && (i >= 0); i++)
             {
                 vol += Mathf.Abs(data[i]);
             }
-            Debug.Log(vol / 512);
+            vol /= 2048;
+            Debug.Log(vol);
+            
+            UpdateUI($"Connected! Volume:<color=yellow>{vol * 100:00}%</color>",vol);
+        }
+        
+        void UpdateUI(string state, float volume = -1.0f)
+        {
+            var text = GetComponentInChildren<Text>();
+            if (text)
+            {
+                text.text = state;
+            }
+            
+            var slider = GetComponentInChildren<Slider>(includeInactive:true);
+            if (volume < 0.0f)
+            {
+                slider.gameObject.SetActive(false);
+                return;
+            }
+            
+            slider.gameObject.SetActive(true);
+            slider.value = volume;
         }
 
         void OnDestroy()
