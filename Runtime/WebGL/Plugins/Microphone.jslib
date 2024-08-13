@@ -52,7 +52,11 @@ var Microphone = {
 
     JS_Microphone_IsRecording: function(deviceIndex) {
         var ctx = document.unityMicrophoneInteropContext;
-        return ctx && ctx.stream;
+        if (ctx && ctx.stream) {
+            return true;
+        } else {
+            return false;
+        }
     },
 
     // Get the current index of the last recorded sample
