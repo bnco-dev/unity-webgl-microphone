@@ -106,7 +106,7 @@ namespace UnityEngine
                 : SAMPLES_PER_UPDATE_LOWFREQ;
             var clip = AudioClip.Create(
                 name: "Microphone AudioClip",
-                lengthSamples: samplesPerUpdate*LENGTH_SAMPLES_MULTIPLIER,
+                lengthSamples: samplesPerUpdate*LENGTH_SAMPLES_MULTIPLIER*lengthSec,
                 channels: 1,
                 frequency: sampleRate,
                 stream: false
