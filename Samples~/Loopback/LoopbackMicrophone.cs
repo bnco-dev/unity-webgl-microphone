@@ -8,6 +8,11 @@ namespace UnityWebGLMicrophone.Samples
         private AudioClip clip;
         private AudioSource audioSource;
 
+        void FixedUpdate()
+        {
+            Debug.Log($"Is Recording: {Microphone.IsRecording("")}");
+        }
+        
         void Update()
         {
             if (!clip)
@@ -17,12 +22,18 @@ namespace UnityWebGLMicrophone.Samples
                 // granted in the browser, or if the user hasn't interacted
                 // with the web page yet. So just keep trying until we get a
                 // clip.
-                clip = Microphone.Start("",true,10,16000);
+                clip = Microphone.Start("",true,5,16000);
                 
                 if (!clip)
                 {
                     UpdateUI("Click to start loopback");
                     return;
+                }
+                
+                if (clip)
+                {
+                    Debug.Log($"Clip Frequency: {clip.frequency}");
+                    Debug.Log($"Clip Length: {clip.samples}");
                 }
             }
 
@@ -45,7 +56,7 @@ namespace UnityWebGLMicrophone.Samples
                 vol += Mathf.Abs(data[i]);
             }
             vol /= 2048;
-            Debug.Log(vol);
+            Debug.Log($"Volume: {vol}");
             
             UpdateUI($"Connected! Volume:<color=yellow>{vol * 100:00}%</color>",vol);
         }

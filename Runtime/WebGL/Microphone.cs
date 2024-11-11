@@ -1,4 +1,4 @@
-﻿#if !UNITY_EDITOR && UNITY_WEBGL
+﻿// #if !UNITY_EDITOR && UNITY_WEBGL
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -9,24 +9,38 @@ namespace UnityEngine
     // use it for multiplatform projects without preprocessor defines.
     // Not a complete match for functionality:
     //
-    // 1) If Start() is called before the user has interacted with the web page,
-    // it can fail and return null. Typical solution is to only call Start()
-    // after a user must have interacted with the page (i.e., after something
-    // has been clicked). You can also safely just keep calling Start() every
-    // few seconds until it returns a clip.
+    // 1) If `Start()` is called before the user has interacted with the web
+    // page, it can fail and return null. This is a limitation of the web.
+    // Specifically, AudioContexts cannot be started until the first user
+    // interaction. One solution is to only call `Start()` after a user must
+    // have interacted with the page (i.e., after something has been clicked).
+    // You can also safely just keep calling it every few seconds until it
+    // returns a clip.
     //
-    // 2) Ignores deviceName arguments and only lists the default device. It's
-    // probably possible to target a specific device, just not implemented here.
-    // Best practice for the web seems to be to use the default device anyway.
+    // 2) Calling `Start()`, `GetPosition()`, `IsRecording()` or
+    // `GetDeviceCaps()` will kick off the permissions procedure in the user's
+    // browser. During this time `Start()` will provide clips, but they will not
+    // be filled with data. You can use `IsRecording()` to check whether data is
+    // currently coming in. This is similar to other platforms as there is
+    // usually a delay between Audio Clip creation and microphone input. Here
+    // though the delay time may take longer, and data may never come in if the
+    // user does not give microphone permission. There is currently no way to
+    // test if the user has declined permission. 
     //
-    // 3) All arguments to Start() are ignored. The clip length is fixed to
-    // a safe default, is always looped, and frequency is left to the browser to
+    // 3) This package can only access the default recording device. It's
+    // probably possible to target a specific device, but it's not implemented
+    // here. Best practice for the web seems to be to use the default device
+    // anyway.
+    //
+    // 4) The recording is always looped and frequency is left to the browser to
     // decide. Though it's possible in theory to specify your desired frequency
     // in the browser, this only led to audio issues when I tested it.
     //
-    // 4) Unity's audio API has limitations on WebGL. See
-    // (https://docs.unity3d.com/Manual/webgl-audio.html)
+    // 5) `Start()` will set the generated audio clips to the specified length,
+    // but they may be up to 512 samples shorter or longer than expected to
+    // simplify ring buffer behaviour in the plugin.
     //
+    // 6) Unity's audio API has [limitations](https://docs.unity3d.com/Manual/webgl-audio.html) on WebGL.
     // Enjoy :)
     public class Microphone
     {
@@ -91,6 +105,11 @@ namespace UnityEngine
         // Client code has responsibility to destroy returned AudioClip.
         public static AudioClip Start(string deviceName, bool loop, int lengthSec, int frequency)
         {
+            if (lengthSec <= 0)
+            {
+                return null;
+            }
+
             if (!JS_Microphone_InitOrResumeContext() || JS_Microphone_IsRecording(0))
             {
                 return null;
@@ -101,12 +120,24 @@ namespace UnityEngine
             const int LENGTH_SAMPLES_MULTIPLIER = 32;
 
             var sampleRate = JS_Microphone_GetSampleRate(0);
+
+            if (sampleRate <= 0)
+            {
+                return null;
+            }
+
             var samplesPerUpdate = sampleRate > 32000
                 ? SAMPLES_PER_UPDATE_HIGHFREQ
                 : SAMPLES_PER_UPDATE_LOWFREQ;
+            var lengthSamples = sampleRate * lengthSec;
+            
+            // Make sure clip sample count is a multiple of samplesPerUpdate
+            var updatesPerClip = lengthSamples / (float)samplesPerUpdate; 
+            lengthSamples = Mathf.RoundToInt(updatesPerClip) * samplesPerUpdate;
+            
             var clip = AudioClip.Create(
                 name: "Microphone AudioClip",
-                lengthSamples: samplesPerUpdate*LENGTH_SAMPLES_MULTIPLIER,
+                lengthSamples: lengthSamples,
                 channels: 1,
                 frequency: sampleRate,
                 stream: false
@@ -123,4 +154,4 @@ namespace UnityEngine
         }
     }
 }
-#endif
+// #endif

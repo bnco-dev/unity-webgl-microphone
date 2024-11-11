@@ -1,8 +1,8 @@
 {
   "name": "com.bnco.unity-webgl-microphone",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "displayName": "Unity WebGL Microphone",
-  "description": "Microphone plugin for Unity when using WebGL/WebXR build target",
+  "description": "Microphone plugin for Unity when using WebGL build target",
   "unity": "2020.3",
   "keywords": [],
   "author": {
