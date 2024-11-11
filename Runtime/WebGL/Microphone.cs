@@ -1,4 +1,4 @@
-﻿// #if !UNITY_EDITOR && UNITY_WEBGL
+﻿#if !UNITY_EDITOR && UNITY_WEBGL
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -154,4 +154,4 @@ namespace UnityEngine
         }
     }
 }
-// #endif
+#endif
